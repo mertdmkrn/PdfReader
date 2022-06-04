@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>Giriş Sayfası</title>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="stylesheet"  href="/css/giris.css" th:href="@{/css/giris.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+<body>
+    <div class="ana">
+        <div class="ust">
+            <div class="logo">
+                <img src="/images/logo.jpg">
+            </div>
+            <h3>PDF OKUYUCU</h3>
+      
+        </div>
+        <div class="login">
+            <h5>GİRİŞ YAP</h5>
+            <form action="/giris" method="post">
+                <div class="input-container">
+                  <i class="fa fa-user icon"  style="font-size: 20px;"></i>
+                  <input class="input-field" type="text" name="username" placeholder="Kullanıcı Adı">
+                </div>
+                
+                <div class="input-container">
+                  <i class="fa fa-key icon"  style="font-size: 20px;"></i>
+                  <input class="input-field" type="password" name="password" placeholder="Şifre">
+                </div>
+              
+                <button type="submit" class="btn">Tamam</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

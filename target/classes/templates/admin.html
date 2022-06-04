@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Paneli</title>
+</head>
+<link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+<body>
+    <div class="ana">
+        <div class="ust">
+            <div class="sol">
+                <p>PDF OKUYUCU | Admin</p>
+            </div>
+            <div class="orta">
+                <img src="images/logo.png" width="190" height="auto">
+            </div>
+            <div class="sag">
+                 <a href="/logout" title="Çıkış Yap"><i class="fa fa-sign-out"></i></a>
+                <p><i class="fa fa-user"></i> <span th:text="${kullaniciAdSoyad}"></span></p>
+            </div>
+        </div>
+        <div class="icerik">
+                <div>
+                    <p>Projeler</p>
+                    <button id="popupBtn">Filtrele</button>
+                    <a th:if="${projeFiltreContext.filtreTuru != ''}" href="/admin" style="margin-left:3px"><button>Hepsi</button></a>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                           <tr>
+                           	   <th scope="col">Öğretmen</th>
+                               <th scope="col">Ders</th>
+                               <th scope="col">Dönem</th>
+                               <th scope="col">Başlık</th>
+                               <th scope="col">Anahtar Kelime</th>
+                               <th scope="col">Yazarlar</th>
+                               <th scope="col">Danışmanlar</th>
+                               <th scope="col">Juriler</th>
+                               <th scope="col">PDF</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr th:each="proje : ${projeler}"> 
+                           	   <td><span th:text="${proje.kullanici.kulAdSoyad}"></span></td>                 
+                               <td><span th:text="${proje.projeDers}"></span></td>
+                               <td><span th:text="${proje.projeDonem}"></span></td>
+                               <td><span th:text="${proje.projeAdi}"></span></td>
+                               <td>
+                               		<b th:each="anahtarKelime : ${#strings.arraySplit(proje.projeAnahtarKelime, ';')}">
+                               			<span th:text="${anahtarKelime}"></span>
+                               		</b>
+                               </td>
+                               <td>
+                               		<b th:each="ogrenci : ${proje.ogrenciler}">
+                               			<span th:text="${ogrenci.ogrAdSoyad}"></span>
+                               		</b>
+                               </td>
+                               <td>
+                               		<b th:each="danisman : ${proje.danismanlar}">
+                               			<span th:text="${danisman.danismanAdSoyad}"></span>
+                               		</b>
+                               </td>
+                               <td>
+                               		<b th:each="juri : ${proje.juriler}">
+                               			<span th:text="${juri.juriAdSoyad}"></span>
+                               		</b>
+                               </td>
+                               <td style="text-align: center;">
+                                    <a th:href="@{${'/pdf/' + proje.projePdfYolu}}" target="_blank">
+                                    	<i class="fa fa-file"></i>
+                                    </a>
+                                </td>
+                           </tr>
+                       </tbody>
+                   </table>
+                </div>
+                <div>
+                    <p>Kullanıcılar</p>
+                    <a href="/admin/kullaniciDuzenle"><button>Yeni Ekle</button></a>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                           <tr>
+                               <th scope="col">Id</th>
+                               <th scope="col">Ad Soyad</th>
+                               <th scope="col">Kullanıcı Adı</th>
+                               <th scope="col">Şifre</th>
+                               <th scope="col">Rol</th>
+                               <th scope="col" style="width: 70px;"></th>
+                           </tr>
+                       </thead>
+                       <tbody>
+  					   <tr th:each="kullanici : ${kullanicilar}">
+                               <td><span th:text="${kullanici.kulId}"></span></td>
+                               <td><span th:text="${kullanici.kulAdSoyad}"></span></td>
+                               <td><span th:text="${kullanici.kulAdi}"></span></td>
+                               <td><span th:text="${kullanici.kulSifre}"></span></td>
+                               <td><span th:text="${kullanici.kulRol}"></span></td>
+                               <td th:if="${kullanici.kulId > 2}" style="text-align: center;"> 
+                                    <a th:href="@{/admin/kullaniciDuzenle?id={id}(id=${kullanici.kulId})}"><i class="fa fa-edit"></i></a>
+                                    <a onclick="return confirm('Emin misiniz?');" th:href="@{/admin/kullaniciSil?id={id}(id=${kullanici.kulId})}"><i class="fa fa-trash"></i></a>
+                               </td>
+                               <td th:unless="${kullanici.kulId > 2}" style="text-align: center;"></td>
+                           </tr>
+                       </tbody>
+                   </table>
+                </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+	  <div class="modal-content">
+	    <p style="font-weight:bold;">PROJE FİLTRELE<span class="close">&times;</span></p>
+	    <div class="container" style="padding:0">
+	          <div class="col-md-12" style="padding:0">
+                    <form action="/projeFiltrele" th:object="${projeFiltreContext}" method="POST">
+                        <div class="row">
+                        	<div class="form-group col-md-12">
+                 				 <label class="col-form-label">Filtre Türü</label>
+                                 <select name="filtreTuru" id="filtreTuru" onchange="filtreTuruDegisti();" class="form-control">
+                                     <option value="">Seçiniz</option>
+                                     <option value="OGRETMEN">Öğretmen</option>
+                                     <option value="OGRENCI">Öğrenci</option>
+	                        	 	 <option value="DERS">Proje Ders</option>
+	                        	 	 <option value="AD">Proje Adı</option>
+	                        	 	 <option value="DONEM">Proje Dönem</option>
+	                        	 	 <option value="ANAHTARKELIME">Anahtar Kelime</option>
+	                        	 	 <option value="COKLU">Öğretmen + Dönem + Ders</option>
+                           	   	 </select>
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+	                        <div class="row" id="ogretmenForm">
+	                             <div class="form-group col-md-12">
+	                             	 <label class="col-form-label">Öğretmen</label>
+	                                 <select name="ogretmenId" class="form-control">
+		                        	 	 <option th:each="ogretmen : ${ogretmenler}"
+		                            		th:value="${ogretmen.kulId}"
+		                           	    	th:utext="${ogretmen.kulAdSoyad}"/>
+	                           	   	 </select>
+	                            </div>
+	                        </div>
+	   						<div class="row" id="ogrenciForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+	                 				 <label class="col-form-label">Öğrenci</label>
+	                                 <select name="ogrenciAdSoyad" class="form-control">
+		                        	 	 <option th:each="ogrenci : ${ogrenciler}"
+		                            		th:value="${ogrenci}"
+		                           	    	th:utext="${ogrenci}"/>
+	                           	   	 </select>
+	                            </div>
+	                        </div>
+	                        <div class="row" id="dersForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+	         						<label class="col-form-label">Ders</label>
+	                                <select name="projeDers" class="form-control">
+		                        	 	 <option value="BİTİRME PROJESİ">BİTİRME PROJESİ</option>
+		                        	 	 <option value="ARAŞTIRMA PROBLEMLERİ">ARAŞTIRMA PROBLEMLERİ</option>
+		                        	</select>
+	                            </div>
+	                        </div>
+	                        <div class="row" id="adForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+		                                <label class="col-form-label">Proje Adı</label>
+		                                <input type="text" class="form-control" name="projeAdi">
+	                            </div>
+	                        </div>
+	                        <div class="row" id="donemForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+		                             <label class="col-form-label">Dönem</label>
+		                             
+	                                 <select name="projeDonem" class="form-control">
+	                                 	 <option value="2017-2018 Güz">2017-2018 Güz</option>
+		                        	 	 <option value="2017-2018 Bahar">2017-2018 Bahar</option>
+		                        	 	 <option value="2018-2019 Güz">2018-2019 Güz</option>
+		                        	 	 <option value="2018-2019 Bahar">2018-2019 Bahar</option>
+		                        	 	 <option value="2019-2020 Güz">2019-2020 Güz</option>
+		                        	 	 <option value="2019-2020 Bahar">2019-2020 Bahar</option>
+		                        	 	 <option value="2020-2021 Güz">2020-2021 Güz</option>
+		                        	 	 <option value="2020-2021 Bahar">2020-2021 Bahar</option>
+		                        	 	 <option value="2021-2022 Güz">2021-2022 Güz</option>
+		                        	 	 <option value="2021-2022 Bahar">2021-2022 Bahar</option>
+		                        	 	 <option value="2022-2023 Güz">2022-2023 Güz</option>
+		                        	 	 <option value="2022-2023 Bahar">2022-2023 Bahar</option>
+	                           	   	 </select>
+	                            </div>
+	                        </div>
+	                        <div class="row" id="anahtarKelimeForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+		                    		 <label class="col-form-label">Anahtar Kelime</label>
+		                             <input type="text" class="form-control" name="anahtarKelime">
+	                            </div>
+	                        </div>
+	                        <div class="row" id="cokluForm" style="display:none;">
+	                             <div class="form-group col-md-12">
+	                             	 <label class="col-form-label">Öğretmen</label>
+	                                 <select name="ogretmenId" class="form-control">
+		                        	 	 <option th:each="ogretmen : ${ogretmenler}"
+		                            		th:value="${ogretmen.kulId}"
+		                           	    	th:utext="${ogretmen.kulAdSoyad}"/>
+	                           	   	 </select>
+	                        	</div>
+	                             <div class="form-group col-md-12">
+		                             <label class="col-form-label">Dönem</label>
+		                             
+	                                 <select name="projeDonemCoklu" class="form-control">
+	                                 	 <option value="2017-2018 Güz">2017-2018 Güz</option>
+		                        	 	 <option value="2017-2018 Bahar">2017-2018 Bahar</option>
+		                        	 	 <option value="2018-2019 Güz">2018-2019 Güz</option>
+		                        	 	 <option value="2018-2019 Bahar">2018-2019 Bahar</option>
+		                        	 	 <option value="2019-2020 Güz">2019-2020 Güz</option>
+		                        	 	 <option value="2019-2020 Bahar">2019-2020 Bahar</option>
+		                        	 	 <option value="2020-2021 Güz">2020-2021 Güz</option>
+		                        	 	 <option value="2020-2021 Bahar">2020-2021 Bahar</option>
+		                        	 	 <option value="2021-2022 Güz">2021-2022 Güz</option>
+		                        	 	 <option value="2021-2022 Bahar">2021-2022 Bahar</option>
+		                        	 	 <option value="2022-2023 Güz">2022-2023 Güz</option>
+		                        	 	 <option value="2022-2023 Bahar">2022-2023 Bahar</option>
+	                           	   	 </select>
+	                            </div>
+	                            <div class="form-group col-md-12">
+	         						<label class="col-form-label">Ders</label>
+	                                <select name="projeDersCoklu" class="form-control">
+		                        	 	 <option value="BİTİRME PROJESİ">BİTİRME PROJESİ</option>
+		                        	 	 <option value="ARAŞTIRMA PROBLEMLERİ">ARAŞTIRMA PROBLEMLERİ</option>
+		                        	</select>
+	                            </div>
+                        	</div>
+	                        <div class="row" id="formBtn">
+	                            <div>
+	                                <input style="display:block; width:97% ; margin:0 auto; margin-top:12px;" type="submit" class="btn btn-dark" value="Filtrele">
+	                            </div>
+	                        </div>
+                   </form>            
+                </div>
+            </div>
+	    </div>
+	  </div>
+</body>
+<script th:inline="javascript">
+
+	var modal = document.getElementById('myModal');
+	var btn = document.getElementById("popupBtn");
+	var span = document.getElementsByClassName("close")[0];
+	
+	btn.onclick = function() {
+	    modal.style.display = "block";
+	}
+	
+	span.onclick = function() {
+	    modal.style.display = "none";
+	}
+	
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	    }
+	}
+	
+	filtreTuruDegisti();
+	
+	function filtreTuruDegisti(){
+		var selectValue = document.getElementById("filtreTuru").value;
+		var ogretmenForm = document.getElementById("ogretmenForm");
+		var ogrenciForm = document.getElementById("ogrenciForm");
+		var dersForm = document.getElementById("dersForm");
+		var adForm = document.getElementById("adForm");
+		var donemForm = document.getElementById("donemForm");
+		var anahtarKelimeForm = document.getElementById("anahtarKelimeForm");
+		var cokluForm = document.getElementById("cokluForm");
+		var formBtn = document.getElementById("formBtn");
+		
+		if(selectValue == "OGRETMEN"){
+			ogretmenForm.style.display = "block";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "OGRENCI"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "block";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			cokluForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "DERS"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "block";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "AD"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "block";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "DONEM"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "block";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "ANAHTARKELIME"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "block";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == "COKLU"){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "block";
+			formBtn.style.display = "block";
+		}
+		
+		if(selectValue == ""){
+			ogretmenForm.style.display = "none";
+			ogrenciForm.style.display = "none";
+			dersForm.style.display = "none";
+			adForm.style.display = "none";
+			donemForm.style.display = "none";
+			anahtarKelimeForm.style.display = "none";
+			cokluForm.style.display = "none";
+			formBtn.style.display = "none";
+		}
+		
+	}
+</script>
+</html>

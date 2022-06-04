@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+body {
+    background:#fff;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: relative;
+}
+*{
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.ana{
+    width: 100%;
+    height: auto;
+    position: relative;
+    height: auto !important;
+    display: block;
+    margin: 0 auto;
+    background: #fff;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 20px;
+    border-radius: 5px;
+    min-height: 100%;
+}
+
+.ust{
+    width: 100%;
+    height: auto;
+    display: block;
+    text-align: center;
+    margin-bottom: 13px;
+    font-size: 34px;
+}
+
+.ust h3{
+    margin: 0px 0px 0px 0px;
+    padding: 0;
+    font-size: 36px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: #0aa351;
+}
+
+.logo{
+    width:240px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.logo img{
+    width: 100%;
+    height: 100%;
+}
+
+.login{
+    width: 600px;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 3px;
+    border:1px solid #9df3a8;
+    display: block;
+    min-height: auto;
+    padding-bottom: 15px;
+}
+
+.login form{
+    padding: 20px 40px;
+    display: block;
+    margin-top: 10px;
+}
+
+.login h5{
+    font-size: 24px;
+    margin: 0;
+    background-image: linear-gradient(270deg,#9df3a8,hsl(148, 88%, 34%));
+    padding: 10px;
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    display: block;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-weight:bold;
+}
+
+.input-container {
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    margin-bottom: 25px;
+
+}
+  
+.icon {
+    text-align: center;
+    background: #0aa351;
+    padding-top: 11px;
+    color: white;
+    min-width: 50px;
+    text-align: center;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    margin-left: -2px;
+    color: #0aa351;
+    border: 1.8px solid #0aa351;
+    font-weight: 500;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    letter-spacing: 0.8px;
+}
+  
+.input-field:focus {
+    border: 1.8px solid #9df3a8;
+}
+  
+.btn {
+    background-image: linear-gradient(90deg,#9df3a8,#0aa351);
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    background-size: 200%;
+    outline: none;
+    cursor: pointer;
+    transition: .7s ease;
+    font-weight: 700;
+}
+  
+.btn:hover {
+    background-position: right;
+    background-size: 200%;
+    background-image: linear-gradient(270deg,#9df3a8,#0aa351);
+}
+
+@media screen and (max-width: 700px) {
+	
+    .ana{
+        margin-top: 0px;
+        margin-bottom: 10px;
+    }
+
+    .login{
+        width: 100%;
+    }
+    .login form{
+        padding: 10px 20px;
+    }
+
+    .logo{
+        width: 40%;
+    }
+
+    .ust h3{
+        font-size:25px;
+    }
+
+    .login h5{
+        font-size:18px;
+    }
+	
+}

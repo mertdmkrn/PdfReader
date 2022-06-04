@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kullanıcı Düzenle</title>
+</head>
+<link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+<body>
+    <div class="ana">
+        <div class="ust">
+            <div class="sol">
+                <p>PDF OKUYUCU | Admin</p>
+            </div>
+            <div class="orta">
+                <img src="../images/logo.png" width="190" height="auto">
+            </div>
+            <div class="sag">
+                 <a href="/logout" title="Çıkış Yap"><i class="fa fa-sign-out"></i></a>
+                <p><i class="fa fa-user"></i> <span th:text="${kullaniciAdSoyad}"></span></p>
+            </div>
+        </div>
+        <div class="icerik">
+                <div>
+                    <p>Kullanıcı Düzenle</p>
+                    <form th:action="@{/admin/kullaniciKaydet}" th:object="${kullanici}" style="background: white; margin-top: -40px; display: table; width: 100%;" method="POST">
+                            <input type="hidden" class="form-control" name="kulId" th:value="${kullanici.kulId}" required>
+                            <div class="form-group col-md-13" style="margin: 10px;">
+                                <label class="col-form-label">Ad Soyad</label>
+                                <input type="text" class="form-control" name="kulAdSoyad" th:value="${kullanici.kulAdSoyad}" required>
+                            </div>
+                            <div class="form-group col-md-13" style="margin: 10px;">
+                                <label class="col-form-label">Kullanıcı Adı</label>
+                                <input type="text" class="form-control" name="kulAdi" th:value="${kullanici.kulAdi}" required>
+                            </div>
+                            <div class="form-group col-md-13" style="margin: 10px;">
+                                <label class="col-form-label">Şifre</label>
+                                <input type="password" class="form-control" th:value="${kullanici.kulSifre}" name="kulSifre" required>
+                            </div>
+                            <div class="form-group col-md-13" style="margin: 10px;">
+                                <label class="col-form-label">Rol</label>
+                                <select class="form-control" name="kulRol" required>
+                                    <option value="OGRETMEN">Öğretmen</option>
+                                    <option value="ADMIN">Admin</option>
+                                </select>
+                            </div>
+                        <br>
+                        <button type="submit" style="display: block; text-align: center; width: 95.3%; margin-left: 0.5%;">Kaydet</button>
+                    </form>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
